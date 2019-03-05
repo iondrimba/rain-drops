@@ -1,6 +1,6 @@
 # 💦 Playing with Ripple Effect
 
-[![Build Status](https://travis-ci.org/iondrimba/rain-drops.svg?branch=master)](https://travis-ci.org/iondrimba/rain-drops) [![Greenkeeper badge](https://badges.greenkeeper.io/iondrimba/rain-drops.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.org/iondrimba/rain-drops.svg?branch=master)](https://travis-ci.org/iondrimba/rain-drops)
 
 ![Image Title](https://raw.githubusercontent.com/iondrimba/images/master/raindrops.gif)
 
