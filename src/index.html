@@ -4,15 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="theme-color" content="#f15f48">
+  <meta name="theme-color" content="#212d99">
   <meta name="description" content="Pendulum Effect with Threejs" />
-  <meta name="keywords" content="webgl, threejs, Pendulum, effect, hover, web development, demo, tutorial" />
+  <meta name="keywords" content="webgl, threejs, rain drops, effect, web development, demo" />
   <meta name="author" content="Ion D. Filho" />
   <meta name="target" content="all">
   <meta http-equiv="cleartype" content="on">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>Pendulum Effect</title>
+  <title>Rain Drops</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js"></script>
   <script src="https://Threejs.org/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.2/dat.gui.js"></script>
@@ -20,6 +21,13 @@
 </head>
 
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" class="sound-icon" viewBox="0 0 43.54 40">
+    <path d="M6,13H0V27H6L16,40h5V0H16.3ZM16,31.8,10,24,8.5,22H5V18H8.42l1.5-1.9L16,8.43Z"></path>
+    <path class="sound-icon__wave" d="M30.9,10.1l-3.53,3.53a9,9,0,0,1,0,12.73h0l3.53,3.53A14,14,0,0,0,30.9,10.1Z"></path>
+    <path class="sound-icon__wave"
+      d="M36.93,4.07,33.4,7.6a17.54,17.54,0,0,1,0,24.81h0l3.53,3.53A22.51,22.51,0,0,0,37,4.11l0,0Z"></path>
+    <path class="sound-icon__stripe" d="M.28,32.29h0L25,1.18l3.82,3L4.1,35.32l-3.82-3Z"></path>
+  </svg>
   <main>
   </main>
 </body>

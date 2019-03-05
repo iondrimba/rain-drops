@@ -53,6 +53,29 @@ export default class App {
     this.onMouseMove({ clientX: 0, clientY: 0 });
   }
 
+  addSoundControl() {
+    this.sound = new Howl({
+      src: 'https://iondrimbafilho.me/water-drop.mp3'
+    });
+
+    const muted = {
+      true: () => this.soundIcon.classList.add('sound-icon--muted'),
+      false: () => this.soundIcon.classList.remove('sound-icon--muted')
+    };
+
+    this.soundMuted = true;
+    this.soundIcon = document.querySelector('.sound-icon');
+    this.sound.mute(this.soundMuted);
+
+    this.soundIcon.addEventListener('click', () => {
+      this.soundMuted = !this.soundMuted;
+      muted[this.soundMuted]();
+      this.sound.mute(this.soundMuted);
+    });
+
+    muted[this.soundMuted]();
+  }
+
   createScene() {
     this.scene = new THREE.Scene();
 
@@ -223,6 +246,7 @@ export default class App {
         y: -2,
         onUpdate: () => {
           if (waterDrop.position.y < 1 && waterDrop.position.y > -1) {
+            this.sound.play();
             this.radius = 1;
             this.motion = -1;
             this.ripple = {
@@ -273,6 +297,8 @@ export default class App {
 
   init() {
     this.setup();
+
+    this.addSoundControl();
 
     this.createScene();
 
