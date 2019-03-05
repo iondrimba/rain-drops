@@ -4,14 +4,12 @@ import { map, distance, hexToRgbTreeJs } from './helpers';
 export default class App {
   setup() {
     this.gui = new dat.GUI();
-    this.raycaster = new THREE.Raycaster();
     this.backgroundColor = '#212d99';
     this.gutter = { size: 0 };
     this.meshes = [];
     this.grid = { cols: 30, rows: 30 };
     this.width = window.innerWidth;
     this.height = window.innerHeight;
-    this.mouse3D = new THREE.Vector2();
     this.velocity = -.1;
     this.angle = 0;
     this.amplitude = .1;
@@ -19,6 +17,7 @@ export default class App {
     this.waveLength = 200;
     this.ripple = {};
     this.radius = 1;
+    this.interval = 0;
     this.waterDropPositions = [{
       x: -2,
       z: 1.8
@@ -48,9 +47,9 @@ export default class App {
 
     window.addEventListener('resize', this.onResize.bind(this), { passive: true });
 
-    window.addEventListener('mousemove', this.onMouseMove.bind(this), { passive: true });
-
-    this.onMouseMove({ clientX: 0, clientY: 0 });
+    window.addEventListener('visibilitychange', (evt) => {
+      this.pause = evt.target.hidden;
+    }, false);
   }
 
   addSoundControl() {
@@ -93,7 +92,7 @@ export default class App {
     const height = window.innerHeight;
 
     this.camera = new THREE.PerspectiveCamera(10, width / height, 1, 1000);
-    this.camera.position.set(-160, 160, 160);
+    this.camera.position.set(-180, 180, 180);
 
     this.scene.add(this.camera);
   }
@@ -165,10 +164,10 @@ export default class App {
       }
     }
 
-    const centerX = ((this.grid.cols) + ((this.grid.cols) * this.gutter.size)) * .5;
-    const centerZ = ((this.grid.rows) + ((this.grid.rows) * this.gutter.size)) * .5;
+    const centerX = ((this.grid.cols) + ((this.grid.cols) * this.gutter.size)) * .4;
+    const centerZ = ((this.grid.rows) + ((this.grid.rows) * this.gutter.size)) * .6;
 
-    this.groupMesh.position.set(-centerX, 0, -centerZ);
+    this.groupMesh.position.set(-centerX, 1, -centerZ);
 
     this.scene.add(this.groupMesh);
   }
@@ -208,11 +207,6 @@ export default class App {
     this.renderer.setSize(this.width, this.height);
   }
 
-  onMouseMove({ clientX, clientY }) {
-    this.mouse3D.x = (clientX / this.width) * 2 - 1;
-    this.mouse3D.y = -(clientY / this.height) * 2 + 1;
-  }
-
   addWaterDrop() {
     const meshParams = {
       color: '#24ddf7',
@@ -221,7 +215,7 @@ export default class App {
       roughness: 0,
     };
 
-    const geometry = new THREE.BoxBufferGeometry(.5, 1.5, .5);
+    const geometry = new THREE.BoxBufferGeometry(.5, 2, .5);
     const material = new THREE.MeshStandardMaterial(meshParams);
 
     const waterDrop = new THREE.Mesh(geometry, material);
@@ -234,32 +228,38 @@ export default class App {
   }
 
   animateWaterDrops() {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       const waterDrop = this.addWaterDrop();
       const { x, z } = this.getRandomWaterDropPosition();
 
       waterDrop.position.set(x, 50, z);
       this.scene.add(waterDrop);
 
-      TweenMax.to(waterDrop.position, 1, {
-        ease: Sine.easeIn,
-        y: -2,
-        onUpdate: () => {
-          if (waterDrop.position.y < 1 && waterDrop.position.y > -1) {
-            this.sound.play();
-            this.radius = 1;
-            this.motion = -1;
-            this.ripple = {
-              x,
-              z,
-            };
+      if (this.pause) {
+        this.scene.remove(waterDrop);
+        TweenMax.killAll(true);
+      } else {
+        TweenMax.to(waterDrop.position, 1, {
+          ease: Sine.easeIn,
+          y: -2,
+          onUpdate: () => {
+            if (waterDrop.position.y < 1 && waterDrop.position.y > -1) {
+              this.sound.play();
+              this.radius = 1;
+              this.motion = -1;
+              this.ripple = {
+                x,
+                z,
+              };
+            }
+          },
+          onComplete: () => {
+            waterDrop.position.set(0, 50, 0);
+            this.scene.remove(waterDrop);
           }
-        },
-        onComplete: () => {
-          waterDrop.position.set(0, 50, 0);
-          this.scene.remove(waterDrop);
-        }
-      });
+        });
+      }
+
     }, 1300);
   }
 
