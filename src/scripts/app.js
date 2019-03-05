@@ -102,11 +102,6 @@ export default class App {
     const light = new THREE.AmbientLight(obj.color, 1);
 
     this.scene.add(light);
-
-    const gui = this.gui.addFolder('Ambient Light');
-    gui.addColor(obj, 'color').onChange((color) => {
-      light.color = hexToRgbTreeJs(color);
-    });
   }
 
   addSpotLight() {
@@ -117,11 +112,6 @@ export default class App {
     light.castShadow = true;
 
     this.scene.add(light);
-
-    const gui = this.gui.addFolder('Spot Light');
-    gui.addColor(obj, 'color').onChange((color) => {
-      light.color = hexToRgbTreeJs(color);
-    });
   }
 
   addPointLight(color, position) {
